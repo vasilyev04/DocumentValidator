@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">DocumentValidator</string>
+
+    <string name="welcome_day">Добрый день!</string>
+    <string name="choose_document_type">Выберите тип документа для начала проверки</string>
+    <string name="id_card">Удостоверение личности</string>
+    <string name="passport">Паспорт</string>
+    <string name="driver_license">Водительские права</string>
+    <string name="birth_document">Свидетельство о рождении</string>
+    <string name="unknown">Неизвестный</string>
+    <string name="recent_results">Недавние проверки</string>
+    <string name="see_recent_files">Посмотреть все</string>
+    <string name="home">Главная</string>
+    <string name="documents">Документы</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="choose_check_way">Выберите способ проверки</string>
+    <string name="title_document_name">Название документа</string>
+    <string name="check_status_success">Документ успешно прошёл проверку!</string>
+    <string name="check_status_warning">Не удалось распрознать документ</string>
+    <string name="check_status_error">Документ является неподлинным</string>
+    <string name="search">Поиск</string>
+    <string name="delete">Удалить</string>
+    <string name="no_recent_files">Нет недавних файлов</string>
+    <string name="birt_document">Cвидетельство о рождении</string>
+    <string name="others">Другое</string>
+    <string name="completed">Готово</string>
+</resources>
