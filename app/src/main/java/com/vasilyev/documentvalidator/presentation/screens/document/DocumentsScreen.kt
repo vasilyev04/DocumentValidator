@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.vasilyev.documentvalidator.R
 import com.vasilyev.documentvalidator.domain.models.CheckStatus
@@ -27,7 +29,10 @@ import com.vasilyev.documentvalidator.ui.theme.BoldText
 import com.vasilyev.documentvalidator.ui.theme.Primary
 
 @Composable
-fun DocumentsScreen(navController: NavController){
+fun DocumentsScreen(
+    viewModel: ViewModel = hiltViewModel(),
+    navController: NavController
+){
     Column(
         modifier = Modifier
             .fillMaxSize()
