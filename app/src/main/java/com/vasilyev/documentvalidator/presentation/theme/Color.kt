@@ -1,4 +1,4 @@
-package com.vasilyev.documentvalidator.ui.theme
+package com.vasilyev.documentvalidator.presentation.theme
 
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults

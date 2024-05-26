@@ -1,4 +1,4 @@
-package com.vasilyev.documentvalidator.ui.theme
+package com.vasilyev.documentvalidator.presentation.theme
 
 import android.app.Activity
 import android.graphics.Color

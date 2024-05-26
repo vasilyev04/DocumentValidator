@@ -1,4 +1,7 @@
 package com.vasilyev.documentvalidator
 
-class ValidatorApplication {
-}
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+
+@HiltAndroidApp
+class ValidatorApplication : Application()

@@ -20,8 +20,16 @@ fun NavHost(navController: NavHostController, innerPadding: PaddingValues){
         navController = navController,
         startDestination = BottomBarScreen.Home.route
     ) {
-        composable(route = BottomBarScreen.Home.route) { HomeScreen(navController) }
-        composable(route = BottomBarScreen.Documents.route) { DocumentsScreen(navController) }
-        composable(route = Screen.Result.route){ ResultScreen(navController) }
+        composable(route = BottomBarScreen.Home.route) {
+            HomeScreen(navController = navController)
+        }
+
+        composable(route = BottomBarScreen.Documents.route) {
+            DocumentsScreen(navController = navController)
+        }
+
+        composable(route = Screen.Result.route){
+            ResultScreen(navController = navController)
+        }
     }
 }

@@ -26,16 +26,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.vasilyev.documentvalidator.R
 import com.vasilyev.documentvalidator.presentation.components.CardResultSuccess
-import com.vasilyev.documentvalidator.ui.theme.BoldText
-import com.vasilyev.documentvalidator.ui.theme.Primary
-import com.vasilyev.documentvalidator.ui.theme.Typography
-import com.vasilyev.documentvalidator.ui.theme.White
+import com.vasilyev.documentvalidator.presentation.theme.BoldText
+import com.vasilyev.documentvalidator.presentation.theme.Primary
+import com.vasilyev.documentvalidator.presentation.theme.Typography
+import com.vasilyev.documentvalidator.presentation.theme.White
 
 @Composable
-fun ResultScreen(navController: NavController){
+fun ResultScreen(
+    viewModel: ResultViewModel = hiltViewModel(),
+    navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxSize()

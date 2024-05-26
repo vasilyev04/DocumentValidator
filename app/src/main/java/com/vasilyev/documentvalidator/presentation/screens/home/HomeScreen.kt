@@ -21,6 +21,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +34,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.vasilyev.documentvalidator.R
 import com.vasilyev.documentvalidator.domain.models.CheckStatus
@@ -39,14 +44,28 @@ import com.vasilyev.documentvalidator.presentation.models.Document
 import com.vasilyev.documentvalidator.presentation.components.CardResentCheck
 import com.vasilyev.documentvalidator.presentation.navigation.bottombar.BottomBarScreen
 import com.vasilyev.documentvalidator.presentation.navigation.main.Screen
-import com.vasilyev.documentvalidator.ui.theme.Accent
-import com.vasilyev.documentvalidator.ui.theme.BoldText
-import com.vasilyev.documentvalidator.ui.theme.DefaultText
-import com.vasilyev.documentvalidator.ui.theme.Primary
-import com.vasilyev.documentvalidator.ui.theme.Typography
+import com.vasilyev.documentvalidator.presentation.screens.checking.CheckWayBottomSheet
+import com.vasilyev.documentvalidator.presentation.theme.Accent
+import com.vasilyev.documentvalidator.presentation.theme.BoldText
+import com.vasilyev.documentvalidator.presentation.theme.DefaultText
+import com.vasilyev.documentvalidator.presentation.theme.Primary
+import com.vasilyev.documentvalidator.presentation.theme.Typography
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    navController: NavController
+){
+    val state by viewModel.homeState.collectAsState()
+
+    val (showBottomSheet, setShowBottomSheet) = remember { mutableStateOf(false) }
+
+    if(showBottomSheet){
+        CheckWayBottomSheet {
+            setShowBottomSheet(false)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,9 +74,25 @@ fun HomeScreen(navController: NavController){
     ){
         Header()
         Spacer(modifier = Modifier.height(16.dp))
-        ChooseDocument()
+        ChooseDocument {
+            setShowBottomSheet(true)
+        }
         Spacer(modifier = Modifier.height(30.dp))
-        RecentResults(true, navController)
+
+        when(state){
+            is HomeState.Loading -> {
+                //TODO
+            }
+
+            is HomeState.CheckingResultListReceived -> {
+                val list = (state as HomeState.CheckingResultListReceived).list
+
+                RecentResults(
+                    list = list,
+                    navController = navController
+                )
+            }
+        }
     }
 }
 
@@ -79,7 +114,7 @@ private fun Header() {
 }
 
 @Composable
-private fun ChooseDocument() {
+private fun ChooseDocument(onDocumentSelect: (Document) -> Unit) {
     val documents = listOf(
         Document(
             title = stringResource(R.string.id_card),
@@ -105,13 +140,15 @@ private fun ChooseDocument() {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ){
         items(documents){ document ->
-            CardDocument(document = document)
+            CardDocument(document = document){
+                onDocumentSelect(it)
+            }
         }
     }
 }
 
 @Composable
-private fun RecentResults(recentFileExist: Boolean, navController: NavController){
+private fun RecentResults(list: List<CheckingResult>, navController: NavController){
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -124,12 +161,14 @@ private fun RecentResults(recentFileExist: Boolean, navController: NavController
             )
 
             Text(
-                modifier = Modifier.fillMaxWidth().clickable(
-                    interactionSource = remember { MutableInteractionSource() } ,
-                    indication = null
-                ) {
-                    navController.navigate(BottomBarScreen.Documents.route)
-                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        navController.navigate(BottomBarScreen.Documents.route)
+                    },
                 text = stringResource(R.string.see_recent_files),
                 style = Typography.DefaultText.copy(
                     fontSize = 12.sp
@@ -140,17 +179,11 @@ private fun RecentResults(recentFileExist: Boolean, navController: NavController
         }
         
         Spacer(modifier = Modifier.height(30.dp))
-        if(recentFileExist){
+        if(list.isNotEmpty()){
             Column {
-                for(i in 0 until 2){
+                for(result in list){
                     CardResentCheck(
-                        CheckingResult(
-                            0,
-                            "Document name",
-                            "",
-                            CheckStatus.SUCCESS,
-                            "Today"
-                        ),
+                        result,
                         onItemClick = {
                             navController.navigate(Screen.Result.route)
                         },
@@ -177,9 +210,19 @@ private fun RecentResults(recentFileExist: Boolean, navController: NavController
 }
 
 @Composable
-private fun CardDocument(document: Document){
+private fun CardDocument(
+    document: Document,
+    onDocumentSelect: (Document) -> Unit
+){
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {
+                onDocumentSelect(document)
+            },
         shape = RoundedCornerShape(12.dp),
     ) {
         Column(

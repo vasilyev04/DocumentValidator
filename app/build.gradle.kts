@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -51,7 +53,23 @@ android {
 
 dependencies {
 
+    //Jetpack Navigation
     implementation(libs.androidx.navigation.compose)
+
+    //Room
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.room.compiler)
+
+    //Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
+
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

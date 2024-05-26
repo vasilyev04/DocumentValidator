@@ -23,10 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vasilyev.documentvalidator.R
-import com.vasilyev.documentvalidator.ui.theme.DefaultText
-import com.vasilyev.documentvalidator.ui.theme.GrayColor
-import com.vasilyev.documentvalidator.ui.theme.SearchBarColors
-import com.vasilyev.documentvalidator.ui.theme.Typography
+import com.vasilyev.documentvalidator.presentation.theme.DefaultText
+import com.vasilyev.documentvalidator.presentation.theme.GrayColor
+import com.vasilyev.documentvalidator.presentation.theme.SearchBarColors
+import com.vasilyev.documentvalidator.presentation.theme.Typography
 
 @Composable
 fun MySearchBar(

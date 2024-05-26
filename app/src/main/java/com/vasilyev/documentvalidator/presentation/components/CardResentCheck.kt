@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.sp
 import com.vasilyev.documentvalidator.R
 import com.vasilyev.documentvalidator.domain.models.CheckStatus
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
-import com.vasilyev.documentvalidator.ui.theme.DefaultText
-import com.vasilyev.documentvalidator.ui.theme.Typography
+import com.vasilyev.documentvalidator.presentation.theme.DefaultText
+import com.vasilyev.documentvalidator.presentation.theme.Typography
 
 
 @Composable

@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.vasilyev.documentvalidator.ui.theme.Accent
+import com.vasilyev.documentvalidator.presentation.theme.Accent
 
 
 @Composable

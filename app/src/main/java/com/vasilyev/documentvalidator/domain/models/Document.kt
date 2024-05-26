@@ -1,4 +1,8 @@
 package com.vasilyev.documentvalidator.domain.models
 
-class Document {
+enum class Document {
+    ID_CARD,
+    DRIVER_LICENSE,
+    BIRTH_DOCUMENT,
+    UNDEFINED,
 }

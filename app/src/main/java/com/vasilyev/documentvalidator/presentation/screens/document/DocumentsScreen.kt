@@ -12,6 +12,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -25,14 +28,16 @@ import com.vasilyev.documentvalidator.domain.models.CheckingResult
 import com.vasilyev.documentvalidator.presentation.components.CardResentCheck
 import com.vasilyev.documentvalidator.presentation.components.MySearchBar
 import com.vasilyev.documentvalidator.presentation.navigation.main.Screen
-import com.vasilyev.documentvalidator.ui.theme.BoldText
-import com.vasilyev.documentvalidator.ui.theme.Primary
+import com.vasilyev.documentvalidator.presentation.theme.BoldText
+import com.vasilyev.documentvalidator.presentation.theme.Primary
 
 @Composable
 fun DocumentsScreen(
-    viewModel: ViewModel = hiltViewModel(),
+    viewModel: DocumentsViewModel = hiltViewModel(),
     navController: NavController
 ){
+    val state by viewModel.documentsState.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,7 +48,14 @@ fun DocumentsScreen(
         Spacer(modifier = Modifier.height(24.dp))
         SearchBar()
         Spacer(modifier = Modifier.height(20.dp))
-        RecentResults(navController)
+        when(state){
+            is DocumentsState.Loading -> { }
+            is DocumentsState.CheckingResultListReceived -> {
+                val list = (state as DocumentsState.CheckingResultListReceived).list
+
+                RecentResults(list, navController)
+            }
+        }
     }
 }
 
@@ -67,24 +79,19 @@ private fun SearchBar(){
 }
 
 @Composable
-private fun RecentResults(navController: NavController){
-    val list = mutableListOf<CheckingResult>()
-    repeat(10){
-        list.add(CheckingResult(
-            0,
-            "Document name",
-            "",
-            CheckStatus.SUCCESS,
-            "Today"))
-    }
-
+private fun RecentResults(list: List<CheckingResult>, navController: NavController){
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(list){ document ->
+        items(
+            items = list,
+            key = { result ->
+                result.id
+            }
+        ){ document ->
             CardResentCheck(
                 checkingResult = document,
-                onItemClick ={
+                onItemClick = {
                     navController.navigate(Screen.Result.route)
                 }
             ) {

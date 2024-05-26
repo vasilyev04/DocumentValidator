@@ -23,11 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vasilyev.documentvalidator.R
-import com.vasilyev.documentvalidator.ui.theme.DefaultText
-import com.vasilyev.documentvalidator.ui.theme.Error
-import com.vasilyev.documentvalidator.ui.theme.Success
-import com.vasilyev.documentvalidator.ui.theme.Typography
-import com.vasilyev.documentvalidator.ui.theme.Warning
+import com.vasilyev.documentvalidator.presentation.theme.DefaultText
+import com.vasilyev.documentvalidator.presentation.theme.Error
+import com.vasilyev.documentvalidator.presentation.theme.Success
+import com.vasilyev.documentvalidator.presentation.theme.Typography
+import com.vasilyev.documentvalidator.presentation.theme.Warning
 
 @Composable
 fun CardResultSuccess(){
@@ -146,5 +146,4 @@ fun CardResultSuccessPreview(){
         CardResultWarning()
         CardResultError()
     }
-
 }
