@@ -1,5 +1,7 @@
 package com.vasilyev.documentvalidator.data.repository
 
+import android.text.Editable
+import android.text.TextWatcher
 import com.vasilyev.documentvalidator.domain.models.CheckStatus
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
 import com.vasilyev.documentvalidator.domain.repository.RecentResultsRepository
@@ -28,5 +30,15 @@ class RecentResultRepositoryImpl @Inject constructor(): RecentResultsRepository 
         }
 
         emit(list)
+    }
+
+    override suspend fun getRecentResult(id: Int): CheckingResult {
+        return CheckingResult(
+            id,
+            "Document name",
+            "",
+            CheckStatus.SUCCESS,
+            "Today"
+        )
     }
 }

@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecentResultsRepository {
     fun getRecentResults(): Flow<List<CheckingResult>>
+
+    suspend fun getRecentResult(id: Int): CheckingResult
 }

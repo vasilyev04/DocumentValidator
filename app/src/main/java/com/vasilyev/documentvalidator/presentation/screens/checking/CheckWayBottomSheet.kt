@@ -1,6 +1,8 @@
 package com.vasilyev.documentvalidator.presentation.screens.checking
 
 
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,10 +49,9 @@ fun CheckWayBottomSheet(onDismiss: () -> Unit){
                 colors = CardDefaults.cardColors(
                     containerColor = White
                 )
-            ) {
+            ){
 
             }
         }
-
     }
 }

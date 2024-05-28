@@ -13,6 +13,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface DomainModule {
+
     @Binds
     @Singleton
     fun bindRecentResultRepository(

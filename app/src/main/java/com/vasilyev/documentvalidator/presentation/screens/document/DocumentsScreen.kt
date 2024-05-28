@@ -1,5 +1,7 @@
 package com.vasilyev.documentvalidator.presentation.screens.document
 
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -100,3 +102,5 @@ private fun RecentResults(list: List<CheckingResult>, navController: NavControll
         }
     }
 }
+
+
