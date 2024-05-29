@@ -25,7 +25,6 @@ import com.vasilyev.documentvalidator.presentation.theme.White
 fun CheckWayBottomSheet(onDismiss: () -> Unit){
     ModalBottomSheet(
         onDismissRequest = { onDismiss() },
-        containerColor = Primary
     ){
         Row(
             modifier = Modifier
@@ -37,7 +36,7 @@ fun CheckWayBottomSheet(onDismiss: () -> Unit){
                 modifier = Modifier.height(100.dp).width(140.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = White
+                    containerColor = Primary
                 )
             ) {
 
@@ -47,7 +46,7 @@ fun CheckWayBottomSheet(onDismiss: () -> Unit){
                 modifier = Modifier.height(100.dp).width(140.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = White
+                    containerColor = Primary
                 )
             ){
 

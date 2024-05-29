@@ -1,20 +1,19 @@
 package com.vasilyev.documentvalidator.data.repository
 
-import android.text.Editable
-import android.text.TextWatcher
+import com.vasilyev.documentvalidator.data.source.local.entity.CheckingResultDbo
+import com.vasilyev.documentvalidator.data.source.local.room.ResentChecksDao
+import com.vasilyev.documentvalidator.data.source.remote.retrofit.ApiService
 import com.vasilyev.documentvalidator.domain.models.CheckStatus
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
 import com.vasilyev.documentvalidator.domain.repository.RecentResultsRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 
-class RecentResultRepositoryImpl @Inject constructor(): RecentResultsRepository {
+class RecentResultRepoImpl @Inject constructor(
+    private val apiService: ApiService,
+    private val checksDao: ResentChecksDao
+): RecentResultsRepository {
 
     override fun getRecentResults(): Flow<List<CheckingResult>> = flow {
         val list = mutableListOf<CheckingResult>()
@@ -40,5 +39,9 @@ class RecentResultRepositoryImpl @Inject constructor(): RecentResultsRepository 
             CheckStatus.SUCCESS,
             "Today"
         )
+    }
+
+    override fun insertRecentResult(recent: CheckingResultDbo): Int {
+        TODO("Not yet implemented")
     }
 }

@@ -1,7 +1,5 @@
 package com.vasilyev.documentvalidator.presentation.screens.document
 
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,16 +14,13 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.vasilyev.documentvalidator.R
-import com.vasilyev.documentvalidator.domain.models.CheckStatus
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
 import com.vasilyev.documentvalidator.presentation.components.CardResentCheck
 import com.vasilyev.documentvalidator.presentation.components.MySearchBar
@@ -92,7 +87,7 @@ private fun RecentResults(list: List<CheckingResult>, navController: NavControll
             }
         ){ document ->
             CardResentCheck(
-                checkingResult = document,
+                resentCheck = document,
                 onItemClick = {
                     navController.navigate(Screen.Result.route)
                 }

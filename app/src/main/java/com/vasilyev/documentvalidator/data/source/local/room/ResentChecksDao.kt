@@ -5,7 +5,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.vasilyev.documentvalidator.data.source.local.entity.CheckingResultDbo
-import com.vasilyev.documentvalidator.domain.models.CheckingResult
 
 @Dao
 interface ResentChecksDao {

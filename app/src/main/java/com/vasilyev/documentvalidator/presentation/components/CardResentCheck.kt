@@ -39,7 +39,7 @@ import com.vasilyev.documentvalidator.presentation.theme.Typography
 
 @Composable
 fun CardResentCheck(
-    checkingResult: CheckingResult,
+    resentCheck: CheckingResult,
     onItemClick: (CheckingResult) -> Unit,
     onOptionClicked: (CheckingResult) -> Unit
 ) {
@@ -51,7 +51,7 @@ fun CardResentCheck(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) {
-                onItemClick(checkingResult)
+                onItemClick(resentCheck)
             },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -69,11 +69,11 @@ fun CardResentCheck(
             ) {
                 ResentCheckPreview()
                 Spacer(modifier = Modifier.width(12.dp))
-                ResentCheckDescription(checkingResult)
+                ResentCheckDescription(resentCheck)
             }
             OptionButton(
                 modifier = Modifier.align(Alignment.TopEnd)
-            ) { onOptionClicked(checkingResult) }
+            ) { onOptionClicked(resentCheck) }
         }
     }
 }
@@ -88,17 +88,17 @@ private fun ResentCheckPreview() {
 }
 
 @Composable
-private fun ResentCheckDescription(checkingResult: CheckingResult) {
+private fun ResentCheckDescription(resentCheck: CheckingResult) {
     Column(
         modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = checkingResult.documentName,
+            text = resentCheck.documentName,
             style = Typography.DefaultText,
         )
         Text(
-            text = checkingResult.uploadDate,
+            text = resentCheck.uploadDate,
             style = Typography.DefaultText.copy(
                 color = Color.Gray,
                 fontSize = 12.sp

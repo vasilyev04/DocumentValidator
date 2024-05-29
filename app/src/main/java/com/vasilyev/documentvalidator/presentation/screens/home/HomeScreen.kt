@@ -35,10 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.vasilyev.documentvalidator.R
-import com.vasilyev.documentvalidator.domain.models.CheckStatus
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
 import com.vasilyev.documentvalidator.presentation.models.Document
 import com.vasilyev.documentvalidator.presentation.components.CardResentCheck

@@ -13,6 +13,7 @@ hiltNavigationCompose = "1.2.0"
 hiltAndroid = "2.51"
 ksp = "1.9.0-1.0.13"
 retrofit = "2.10.0"
+retrofitAdaptersResult = "1.0.9"
 roomCompilerVersion = "2.6.1"
 
 [libraries]
@@ -38,6 +39,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomCompilerVersion" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompilerVersion" }
+retrofit-adapters-result = { module = "com.github.skydoves:retrofit-adapters-result", version.ref = "retrofitAdaptersResult" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompilerVersion" }
 
 [plugins]
