@@ -14,4 +14,16 @@ interface ApiService {
     suspend fun checkIDCard(
         @Part file: MultipartBody.Part
     ): Result<CheckStatusDto>
+
+    @Multipart
+    @POST("/gpt/?type=BIRT_DOCUMENT")
+    suspend fun checkBirtDocument(
+        @Part file: MultipartBody.Part
+    ): Result<CheckStatusDto>
+
+    @Multipart
+    @POST("/gpt/?type=DRIVER_LICENSE")
+    suspend fun checkDriverLicense(
+        @Part file: MultipartBody.Part
+    ): Result<CheckStatusDto>
 }

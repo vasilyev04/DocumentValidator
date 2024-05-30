@@ -27,12 +27,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vasilyev.documentvalidator.R
 import com.vasilyev.documentvalidator.domain.models.CheckStatus
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
+import com.vasilyev.documentvalidator.domain.models.Document
 import com.vasilyev.documentvalidator.presentation.theme.DefaultText
 import com.vasilyev.documentvalidator.presentation.theme.Typography
 
@@ -94,7 +96,7 @@ private fun ResentCheckDescription(resentCheck: CheckingResult) {
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = resentCheck.documentName,
+            text = getDocumentName(resentCheck.documentType),
             style = Typography.DefaultText,
         )
         Text(
@@ -104,6 +106,15 @@ private fun ResentCheckDescription(resentCheck: CheckingResult) {
                 fontSize = 12.sp
             )
         )
+    }
+}
+@Composable
+private fun getDocumentName(documentType: Document): String{
+    return when(documentType){
+        Document.ID_CARD -> stringResource(R.string.id_card)
+        Document.DRIVER_LICENSE -> stringResource(R.string.driver_license)
+        Document.BIRTH_DOCUMENT -> stringResource(R.string.birth_document)
+        Document.UNDEFINED -> stringResource(R.string.others)
     }
 }
 
@@ -137,7 +148,7 @@ fun ItemRecentResultPreview() {
     CardResentCheck(
         CheckingResult(
             0,
-            "Document name",
+            Document.BIRTH_DOCUMENT,
             "",
             CheckStatus.SUCCESS,
             "Today"

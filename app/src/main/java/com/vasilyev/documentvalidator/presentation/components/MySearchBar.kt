@@ -75,7 +75,7 @@ fun MySearchBar(
             imeAction = ImeAction.Search
         ),
         keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
-        onValueChange = { onTextFieldValueChange(it) },
+        onValueChange = onTextFieldValueChange,
         shape = RoundedCornerShape(10.dp),
         colors = SearchBarColors
     )

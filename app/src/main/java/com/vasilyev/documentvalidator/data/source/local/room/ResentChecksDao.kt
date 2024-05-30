@@ -5,11 +5,13 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.vasilyev.documentvalidator.data.source.local.entity.CheckingResultDbo
+import kotlinx.coroutines.flow.Flow
+
 
 @Dao
 interface ResentChecksDao {
     @Query("SELECT * FROM checking_results")
-    fun getResults(): LiveData<List<CheckingResultDbo>>
+    fun getResults(): Flow<List<CheckingResultDbo>>
 
     @Query("SELECT * FROM checking_results WHERE id=:id")
     fun getResult(id: Int): CheckingResultDbo

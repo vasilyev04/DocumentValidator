@@ -4,9 +4,10 @@ import com.vasilyev.documentvalidator.data.source.local.entity.CheckingResultDbo
 import com.vasilyev.documentvalidator.data.source.remote.models.CheckStatusDto
 import com.vasilyev.documentvalidator.domain.models.CheckStatus
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
+import com.vasilyev.documentvalidator.domain.models.Document
 
 fun CheckStatusDto.toCheckingResultDbo(
-    documentName: String,
+    documentType: Document,
     documentPreview: String,
     uploadDate: String
 ): CheckingResultDbo{
@@ -17,7 +18,7 @@ fun CheckStatusDto.toCheckingResultDbo(
     }
 
     return CheckingResultDbo(
-        documentName = documentName,
+        documentType = documentType,
         documentPreview = documentPreview,
         checkStatus = status,
         uploadDate = uploadDate
@@ -26,6 +27,26 @@ fun CheckStatusDto.toCheckingResultDbo(
 
 fun CheckingResultDbo.toCheckingResultModel(): CheckingResult{
     return CheckingResult(
-
+        id = id,
+        documentType = documentType,
+        documentPreview = documentPreview,
+        checkStatus = checkStatus,
+        uploadDate =  uploadDate
     )
+}
+
+fun CheckingResult.toCheckingResultDbo(): CheckingResultDbo{
+    return CheckingResultDbo(
+        id = id,
+        documentType = documentType,
+        documentPreview = documentPreview,
+        checkStatus = checkStatus,
+        uploadDate =  uploadDate
+    )
+}
+
+fun List<CheckingResultDbo>.toCheckingResultModelList(): List<CheckingResult>{
+    return map {
+        it.toCheckingResultModel()
+    }
 }

@@ -6,6 +6,7 @@ import com.vasilyev.documentvalidator.domain.usecase.GetRecentResultsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -13,13 +14,28 @@ import javax.inject.Inject
 class DocumentsViewModel @Inject constructor(
     private val getRecentResultsUseCase: GetRecentResultsUseCase
 ): ViewModel() {
-    private val _documentsState = MutableStateFlow<DocumentsState>(DocumentsState.Loading)
+    private val _documentsState = MutableStateFlow<DocumentsState>(DocumentsState.SearchTextValueChanged(""))
     val documentsState = _documentsState.asStateFlow()
 
     init {
         viewModelScope.launch {
             getRecentResultsUseCase().collect {list ->
                 _documentsState.value = DocumentsState.CheckingResultListReceived(list)
+            }
+        }
+    }
+
+    fun reduce(intent: DocumentIntent){
+        when(intent){
+            is DocumentIntent.OnSearchValueChanged -> {
+                _documentsState.update { currentState ->
+                    when (currentState) {
+                        is DocumentsState.SearchTextValueChanged -> {
+                            currentState.copy(query = intent.query)
+                        }
+                        else -> DocumentsState.SearchTextValueChanged(intent.query)
+                    }
+                }
             }
         }
     }

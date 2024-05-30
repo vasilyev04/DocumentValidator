@@ -41,7 +41,8 @@ import com.vasilyev.documentvalidator.presentation.theme.White
 @Composable
 fun ResultScreen(
     viewModel: ResultViewModel = hiltViewModel(),
-    navController: NavController){
+    navController: NavController
+){
     Column(
         modifier = Modifier
             .fillMaxSize()

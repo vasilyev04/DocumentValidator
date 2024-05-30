@@ -9,5 +9,5 @@ interface RecentResultsRepository {
 
     suspend fun getRecentResult(id: Int): CheckingResult
 
-    fun insertRecentResult(recent: CheckingResultDbo): Int
+    fun addRecentResult(recent: CheckingResult): Int
 }

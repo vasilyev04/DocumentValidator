@@ -38,7 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vasilyev.documentvalidator.R
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
-import com.vasilyev.documentvalidator.presentation.models.Document
+import com.vasilyev.documentvalidator.presentation.models.DocumentUI
 import com.vasilyev.documentvalidator.presentation.components.CardResentCheck
 import com.vasilyev.documentvalidator.presentation.navigation.bottombar.BottomBarScreen
 import com.vasilyev.documentvalidator.presentation.navigation.main.Screen
@@ -112,21 +112,21 @@ private fun Header() {
 }
 
 @Composable
-private fun ChooseDocument(onDocumentSelect: (Document) -> Unit) {
+private fun ChooseDocument(onDocumentSelect: (DocumentUI) -> Unit) {
     val documents = listOf(
-        Document(
+        DocumentUI(
             title = stringResource(R.string.id_card),
             icon = R.drawable.id_card
         ),
-        Document(
+        DocumentUI(
             title = stringResource(R.string.birth_document),
             icon = R.drawable.birth
         ),
-        Document(
+        DocumentUI(
             title = stringResource(R.string.driver_license),
             icon = R.drawable.driver
         ),
-        Document(
+        DocumentUI(
             title = stringResource(R.string.others),
             icon = R.drawable.other
         )
@@ -209,8 +209,8 @@ private fun RecentResults(list: List<CheckingResult>, navController: NavControll
 
 @Composable
 private fun CardDocument(
-    document: Document,
-    onDocumentSelect: (Document) -> Unit
+    document: DocumentUI,
+    onDocumentSelect: (DocumentUI) -> Unit
 ){
     Card(
         modifier = Modifier
