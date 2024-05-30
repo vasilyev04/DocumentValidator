@@ -14,13 +14,15 @@ import javax.inject.Inject
 class DocumentsViewModel @Inject constructor(
     private val getRecentResultsUseCase: GetRecentResultsUseCase
 ): ViewModel() {
-    private val _documentsState = MutableStateFlow<DocumentsState>(DocumentsState.SearchTextValueChanged(""))
+    private val _documentsState = MutableStateFlow(DocumentState())
     val documentsState = _documentsState.asStateFlow()
 
     init {
         viewModelScope.launch {
             getRecentResultsUseCase().collect {list ->
-                _documentsState.value = DocumentsState.CheckingResultListReceived(list)
+                _documentsState.update {
+                    it.copy(documents = list)
+                }
             }
         }
     }
@@ -28,13 +30,8 @@ class DocumentsViewModel @Inject constructor(
     fun reduce(intent: DocumentIntent){
         when(intent){
             is DocumentIntent.OnSearchValueChanged -> {
-                _documentsState.update { currentState ->
-                    when (currentState) {
-                        is DocumentsState.SearchTextValueChanged -> {
-                            currentState.copy(query = intent.query)
-                        }
-                        else -> DocumentsState.SearchTextValueChanged(intent.query)
-                    }
+                _documentsState.update {
+                    it.copy(query = intent.query)
                 }
             }
         }

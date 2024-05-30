@@ -2,8 +2,8 @@ package com.vasilyev.documentvalidator.presentation.screens.document
 
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
 
-sealed class DocumentsState {
-    data class CheckingResultListReceived(val list: List<CheckingResult>): DocumentsState()
-    data object Loading: DocumentsState()
-    data class SearchTextValueChanged(var query: String): DocumentsState()
-}
+data class DocumentState(
+    val documents: List<CheckingResult> = emptyList(),
+    val isLoading: Boolean = true,
+    val query: String = ""
+)

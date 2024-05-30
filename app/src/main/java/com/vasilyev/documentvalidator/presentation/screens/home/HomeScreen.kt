@@ -77,19 +77,13 @@ fun HomeScreen(
         }
         Spacer(modifier = Modifier.height(30.dp))
 
-        when(state){
-            is HomeState.Loading -> {
-                //TODO
-            }
-
-            is HomeState.CheckingResultListReceived -> {
-                val list = (state as HomeState.CheckingResultListReceived).list
-
-                RecentResults(
-                    list = list,
-                    navController = navController
-                )
-            }
+        if(state.isLoading){
+            // Loading
+        }else{
+            RecentResults(
+                list = state.checkingResultList,
+                navController = navController
+            )
         }
     }
 }

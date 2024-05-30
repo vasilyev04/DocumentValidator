@@ -39,7 +39,6 @@ fun DocumentsScreen(
     navController: NavController
 ){
     val state by viewModel.documentsState.collectAsState()
-    var textState by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -50,23 +49,12 @@ fun DocumentsScreen(
         Header()
         Spacer(modifier = Modifier.height(20.dp))
         SearchBar(
-            text = textState,
+            text = state.query,
             onTextFieldValueChanged = {
                 Log.d("test_text", it)
                 viewModel.reduce(DocumentIntent.OnSearchValueChanged(it))
             }
         )
-
-        when(val currentState = state){
-            is DocumentsState.Loading -> { }
-            is DocumentsState.CheckingResultListReceived -> {
-                Spacer(modifier = Modifier.height(24.dp))
-                RecentResults(currentState.list, navController)
-            }
-            is DocumentsState.SearchTextValueChanged -> {
-                textState = currentState.query
-            }
-        }
     }
 }
 
