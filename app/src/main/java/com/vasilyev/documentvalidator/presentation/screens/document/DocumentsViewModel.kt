@@ -21,7 +21,7 @@ class DocumentsViewModel @Inject constructor(
         viewModelScope.launch {
             getRecentResultsUseCase().collect {list ->
                 _documentsState.update {
-                    it.copy(documents = list)
+                    it.copy(documents = list, isLoading = false)
                 }
             }
         }
@@ -31,7 +31,7 @@ class DocumentsViewModel @Inject constructor(
         when(intent){
             is DocumentIntent.OnSearchValueChanged -> {
                 _documentsState.update {
-                    it.copy(query = intent.query)
+                    it.copy(query = intent.query, isLoading = false)
                 }
             }
         }

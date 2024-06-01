@@ -1,5 +1,13 @@
 package com.vasilyev.documentvalidator.presentation.screens.home
 
+import android.app.Activity
+import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,12 +27,14 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +46,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions
+import com.google.mlkit.vision.documentscanner.GmsDocumentScanning
+import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
 import com.vasilyev.documentvalidator.R
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
 import com.vasilyev.documentvalidator.presentation.models.DocumentUI
@@ -48,21 +61,67 @@ import com.vasilyev.documentvalidator.presentation.theme.BoldText
 import com.vasilyev.documentvalidator.presentation.theme.DefaultText
 import com.vasilyev.documentvalidator.presentation.theme.Primary
 import com.vasilyev.documentvalidator.presentation.theme.Typography
+import kotlinx.coroutines.launch
 
+private fun launchScanner(
+    context: Activity,
+    pageLimit: Int,
+    scannerLauncher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>
+){
+    val options = GmsDocumentScannerOptions.Builder()
+        .setGalleryImportAllowed(true)
+        .setPageLimit(pageLimit)
+        .setResultFormats(
+            GmsDocumentScannerOptions.RESULT_FORMAT_JPEG,
+            GmsDocumentScannerOptions.RESULT_FORMAT_PDF
+        )
+        .setScannerMode(GmsDocumentScannerOptions.SCANNER_MODE_FULL)
+        .build()
+
+    val scanner = GmsDocumentScanning.getClient(options)
+
+    scanner.getStartScanIntent(context).addOnSuccessListener { intentSender ->
+        scannerLauncher.launch(
+            IntentSenderRequest.Builder(intentSender).build()
+        )
+    }.addOnFailureListener { exception ->
+        Log.d("CHOOSE_DEBUG_TAG", "ERROR during Scanning: $exception")
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavController
 ){
+    val scannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                val scanningResult =
+                    GmsDocumentScanningResult.fromActivityResultIntent(result.data)
+
+                scanningResult?.pdf?.uri?.let { uri ->
+                    Log.d("CHOOSE_DEBUG_TAG", uri.toString())
+                }
+            }
+        }
+
     val state by viewModel.homeState.collectAsState()
 
-    val (showBottomSheet, setShowBottomSheet) = remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
-    if(showBottomSheet){
-        CheckWayBottomSheet {
-            setShowBottomSheet(false)
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+    )
+
+    CheckWayBottomSheet(
+        bottomSheetState = bottomSheetState,
+        navController = navController,
+        onDismiss =  {
+            coroutineScope.launch { bottomSheetState.hide() }
         }
-    }
+    )
 
     Column(
         modifier = Modifier
@@ -72,14 +131,14 @@ fun HomeScreen(
     ){
         Header()
         Spacer(modifier = Modifier.height(16.dp))
-        ChooseDocument {
-            setShowBottomSheet(true)
+        ChooseDocumentGrid {
+            coroutineScope.launch { bottomSheetState.expand() }
         }
-        Spacer(modifier = Modifier.height(30.dp))
 
         if(state.isLoading){
             // Loading
         }else{
+            Spacer(modifier = Modifier.height(30.dp))
             RecentResults(
                 list = state.checkingResultList,
                 navController = navController
@@ -98,7 +157,7 @@ private fun Header() {
     )
 
     Text(
-        text = stringResource(id = R.string.choose_document_type),
+        text = stringResource(R.string.choose_document_type),
         style = Typography.DefaultText.copy(
             fontSize = 20.sp
         )
@@ -106,7 +165,7 @@ private fun Header() {
 }
 
 @Composable
-private fun ChooseDocument(onDocumentSelect: (DocumentUI) -> Unit) {
+private fun ChooseDocumentGrid(onDocumentSelect: (DocumentUI) -> Unit) {
     val documents = listOf(
         DocumentUI(
             title = stringResource(R.string.id_card),
@@ -172,20 +231,20 @@ private fun RecentResults(list: List<CheckingResult>, navController: NavControll
         
         Spacer(modifier = Modifier.height(30.dp))
         if(list.isNotEmpty()){
-            Column {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 for(result in list){
                     CardResentCheck(
                         result,
                         onItemClick = {
-                            navController.navigate(Screen.Result.route)
+                            navController.navigate(Screen.Checking.route)
                         },
 
                         onOptionClicked = {
 
                         }
                     )
-
-                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }else{

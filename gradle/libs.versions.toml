@@ -15,6 +15,9 @@ ksp = "1.9.0-1.0.13"
 retrofit = "2.10.0"
 retrofitAdaptersResult = "1.0.9"
 roomCompilerVersion = "2.6.1"
+lottie = "4.0.0"
+playServicesBase = "18.5.0"
+playServicesMlkitDocumentScanner = "16.0.0-beta1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,6 +44,10 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomComp
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompilerVersion" }
 retrofit-adapters-result = { module = "com.github.skydoves:retrofit-adapters-result", version.ref = "retrofitAdaptersResult" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompilerVersion" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref="lottie"}
+play-services-base = { module = "com.google.android.gms:play-services-base", version.ref = "playServicesBase" }
+play-services-mlkit-document-scanner = { module = "com.google.android.gms:play-services-mlkit-document-scanner", version.ref = "playServicesMlkitDocumentScanner" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

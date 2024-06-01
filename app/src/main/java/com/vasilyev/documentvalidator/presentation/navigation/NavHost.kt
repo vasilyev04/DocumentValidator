@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import com.vasilyev.documentvalidator.presentation.navigation.bottombar.BottomBarScreen
 import com.vasilyev.documentvalidator.presentation.navigation.main.Screen
+import com.vasilyev.documentvalidator.presentation.screens.checking.CheckingScreen
 import com.vasilyev.documentvalidator.presentation.screens.document.DocumentsScreen
 import com.vasilyev.documentvalidator.presentation.screens.home.HomeScreen
 import com.vasilyev.documentvalidator.presentation.screens.result.ResultScreen
@@ -30,6 +31,10 @@ fun NavHost(navController: NavHostController, innerPadding: PaddingValues){
 
         composable(route = Screen.Result.route){
             ResultScreen(navController = navController)
+        }
+
+        composable(route = Screen.Checking.route){
+            CheckingScreen(navController = navController)
         }
     }
 }

@@ -12,7 +12,6 @@
     <string name="see_recent_files">Посмотреть все</string>
     <string name="home">Главная</string>
     <string name="documents">Документы</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="choose_check_way">Выберите способ проверки</string>
     <string name="title_document_name">Название документа</string>
     <string name="check_status_success">Документ успешно прошёл проверку!</string>
@@ -24,4 +23,7 @@
     <string name="birt_document">Cвидетельство о рождении</string>
     <string name="others">Другое</string>
     <string name="completed">Готово</string>
+    <string name="checking_in_progress">Проверяем ваш документ...</string>
+    <string name="checking_option_scan">Камера</string>
+    <string name="checking_option_upload">Файлы</string>
 </resources>

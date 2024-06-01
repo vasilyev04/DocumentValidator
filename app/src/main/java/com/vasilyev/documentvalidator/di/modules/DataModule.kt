@@ -18,7 +18,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 interface DataModule {
 
-
     companion object{
 
         @Provides
@@ -42,7 +41,7 @@ interface DataModule {
         fun provideRetrofit(): Retrofit {
             return Retrofit
                 .Builder()
-                .baseUrl("SOME_BASE_URL")
+                .baseUrl("https://SOME_BASE_URL")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(ResultCallAdapterFactory.create())
                 .build()

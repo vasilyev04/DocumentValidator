@@ -74,6 +74,15 @@ dependencies {
     //Kotlin Result API for Retrofit
     implementation (libs.retrofit.adapters.result)
 
+    //Lottie
+    implementation(libs.lottie.compose)
+
+    //ML Kit scanner
+    implementation(libs.play.services.mlkit.document.scanner)
+
+    //Google Play services
+    implementation(libs.play.services.base)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

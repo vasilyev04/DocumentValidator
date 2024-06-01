@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vasilyev.documentvalidator.domain.usecase.GetRecentResultsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,9 +22,19 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             getRecentResultsUseCase().collect { list ->
                 if(list.isNotEmpty()){
-                    _homeState.update { it.copy(checkingResultList = list.subList(0, 2)) }
+                    _homeState.update {
+                        it.copy(
+                            checkingResultList = list.subList(0, 2),
+                            isLoading = false
+                        )
+                    }
                 }else{
-                    _homeState.update { it.copy(checkingResultList = list) }
+                    _homeState.update {
+                        it.copy(
+                            checkingResultList = list,
+                            isLoading = false
+                        )
+                    }
                 }
             }
         }

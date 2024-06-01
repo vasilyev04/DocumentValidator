@@ -37,14 +37,28 @@ fun NavigationBar(navController: NavController){
         screens.forEach { item ->
             NavigationBarItem(
                 selected = currentDestination?.route == item.route,
-                onClick = { navController.navigate(item.route) },
+                onClick = {
+                    navController.navigate(item.route)
+
+//                    {
+//                        popUpTo(navController.graph.findStartDestination().id){
+//                            saveState = true
+//                        }
+//                        launchSingleTop = true
+//                        restoreState = true
+//                    }
+                },
                 icon = {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = item.icon),
                         contentDescription = ""
                     )
                 },
-                label = { Text(text = stringResource(id = item.label)) },
+                label = {
+                    Text(
+                        text = stringResource(id = item.label)
+                    )
+                },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Accent,
                     selectedTextColor = Accent,
