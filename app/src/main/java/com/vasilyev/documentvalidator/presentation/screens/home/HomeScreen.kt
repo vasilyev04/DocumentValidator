@@ -1,13 +1,5 @@
 package com.vasilyev.documentvalidator.presentation.screens.home
 
-import android.app.Activity
-import android.util.Log
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,14 +19,15 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,11 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions
-import com.google.mlkit.vision.documentscanner.GmsDocumentScanning
-import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
 import com.vasilyev.documentvalidator.R
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
+import com.vasilyev.documentvalidator.domain.models.Document
 import com.vasilyev.documentvalidator.presentation.models.DocumentUI
 import com.vasilyev.documentvalidator.presentation.components.CardResentCheck
 import com.vasilyev.documentvalidator.presentation.navigation.bottombar.BottomBarScreen
@@ -63,65 +54,30 @@ import com.vasilyev.documentvalidator.presentation.theme.Primary
 import com.vasilyev.documentvalidator.presentation.theme.Typography
 import kotlinx.coroutines.launch
 
-private fun launchScanner(
-    context: Activity,
-    pageLimit: Int,
-    scannerLauncher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>
-){
-    val options = GmsDocumentScannerOptions.Builder()
-        .setGalleryImportAllowed(true)
-        .setPageLimit(pageLimit)
-        .setResultFormats(
-            GmsDocumentScannerOptions.RESULT_FORMAT_JPEG,
-            GmsDocumentScannerOptions.RESULT_FORMAT_PDF
-        )
-        .setScannerMode(GmsDocumentScannerOptions.SCANNER_MODE_FULL)
-        .build()
 
-    val scanner = GmsDocumentScanning.getClient(options)
 
-    scanner.getStartScanIntent(context).addOnSuccessListener { intentSender ->
-        scannerLauncher.launch(
-            IntentSenderRequest.Builder(intentSender).build()
-        )
-    }.addOnFailureListener { exception ->
-        Log.d("CHOOSE_DEBUG_TAG", "ERROR during Scanning: $exception")
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navController: NavController
 ){
-    val scannerLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-            if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                val scanningResult =
-                    GmsDocumentScanningResult.fromActivityResultIntent(result.data)
-
-                scanningResult?.pdf?.uri?.let { uri ->
-                    Log.d("CHOOSE_DEBUG_TAG", uri.toString())
-                }
-            }
-        }
-
     val state by viewModel.homeState.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
 
-    val bottomSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true,
-    )
+    var shouldShowBottomSheet by rememberSaveable {
+        mutableStateOf(false)
+    }
 
-    CheckWayBottomSheet(
-        bottomSheetState = bottomSheetState,
-        navController = navController,
-        onDismiss =  {
-            coroutineScope.launch { bottomSheetState.hide() }
-        }
-    )
+    if(shouldShowBottomSheet){
+        CheckWayBottomSheet(
+            navController = navController,
+            documentType = state.selectedDocument,
+            onDismiss =  {
+                coroutineScope.launch { shouldShowBottomSheet = false }
+            }
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -131,9 +87,12 @@ fun HomeScreen(
     ){
         Header()
         Spacer(modifier = Modifier.height(16.dp))
-        ChooseDocumentGrid {
-            coroutineScope.launch { bottomSheetState.expand() }
-        }
+        ChooseDocumentGrid(
+             onDocumentSelect = { documentType ->
+                 viewModel.reduce(HomeIntent.DocumentSelected(documentType))
+                 coroutineScope.launch { shouldShowBottomSheet = true }
+             }
+        )
 
         if(state.isLoading){
             // Loading
@@ -165,23 +124,27 @@ private fun Header() {
 }
 
 @Composable
-private fun ChooseDocumentGrid(onDocumentSelect: (DocumentUI) -> Unit) {
+private fun ChooseDocumentGrid(onDocumentSelect: (Document) -> Unit) {
     val documents = listOf(
         DocumentUI(
             title = stringResource(R.string.id_card),
-            icon = R.drawable.id_card
+            icon = R.drawable.id_card,
+            documentType = Document.IdCard
         ),
         DocumentUI(
             title = stringResource(R.string.birth_document),
-            icon = R.drawable.birth
+            icon = R.drawable.birth,
+            documentType = Document.BirthDocument
         ),
         DocumentUI(
             title = stringResource(R.string.driver_license),
-            icon = R.drawable.driver
+            icon = R.drawable.driver,
+            documentType = Document.DriverLicense
         ),
         DocumentUI(
             title = stringResource(R.string.others),
-            icon = R.drawable.other
+            icon = R.drawable.other,
+            documentType = Document.Undefined
         )
     )
 
@@ -192,7 +155,7 @@ private fun ChooseDocumentGrid(onDocumentSelect: (DocumentUI) -> Unit) {
     ){
         items(documents){ document ->
             CardDocument(document = document){
-                onDocumentSelect(it)
+                onDocumentSelect(it.documentType)
             }
         }
     }

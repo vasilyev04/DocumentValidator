@@ -25,7 +25,7 @@ class RecentResultRepoImpl @Inject constructor(
         for(i in 0..15){
             list.add(CheckingResult(
                 id = i,
-                documentType = Document.ID_CARD,
+                documentType = Document.IdCard,
                 checkStatus = CheckStatus.SUCCESS,
                 documentPreview = "",
                 uploadDate = "Cегодня"

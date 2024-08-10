@@ -1,6 +1,7 @@
 package com.vasilyev.documentvalidator.common.mappers
 
 import com.vasilyev.documentvalidator.data.source.local.entity.CheckingResultDbo
+import com.vasilyev.documentvalidator.data.source.local.entity.DocumentDbo
 import com.vasilyev.documentvalidator.data.source.remote.models.CheckStatusDto
 import com.vasilyev.documentvalidator.domain.models.CheckStatus
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
@@ -18,17 +19,35 @@ fun CheckStatusDto.toCheckingResultDbo(
     }
 
     return CheckingResultDbo(
-        documentType = documentType,
+        documentType = documentType.toDocumentDbo(),
         documentPreview = documentPreview,
         checkStatus = status,
         uploadDate = uploadDate
     )
 }
 
+fun Document.toDocumentDbo(): DocumentDbo{
+    return when(this){
+        is Document.IdCard -> DocumentDbo.IdCard
+        is Document.BirthDocument -> DocumentDbo.BirthDocument
+        is Document.DriverLicense -> DocumentDbo.DriverLicense
+        is Document.Undefined -> DocumentDbo.Undefined
+    }
+}
+
+fun DocumentDbo.toDocument(): Document{
+    return when(this){
+        is DocumentDbo.IdCard -> Document.IdCard
+        is DocumentDbo.BirthDocument -> Document.BirthDocument
+        is DocumentDbo.DriverLicense -> Document.DriverLicense
+        is DocumentDbo.Undefined -> Document.Undefined
+    }
+}
+
 fun CheckingResultDbo.toCheckingResultModel(): CheckingResult{
     return CheckingResult(
         id = id,
-        documentType = documentType,
+        documentType = documentType.toDocument(),
         documentPreview = documentPreview,
         checkStatus = checkStatus,
         uploadDate =  uploadDate
@@ -38,7 +57,7 @@ fun CheckingResultDbo.toCheckingResultModel(): CheckingResult{
 fun CheckingResult.toCheckingResultDbo(): CheckingResultDbo{
     return CheckingResultDbo(
         id = id,
-        documentType = documentType,
+        documentType = documentType.toDocumentDbo(),
         documentPreview = documentPreview,
         checkStatus = checkStatus,
         uploadDate =  uploadDate

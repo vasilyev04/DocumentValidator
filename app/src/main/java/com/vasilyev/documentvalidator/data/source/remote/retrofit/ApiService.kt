@@ -16,7 +16,7 @@ interface ApiService {
     ): Result<CheckStatusDto>
 
     @Multipart
-    @POST("/gpt/?type=BIRT_DOCUMENT")
+    @POST("/gpt/?type=BIRTH_DOCUMENT")
     suspend fun checkBirtDocument(
         @Part file: MultipartBody.Part
     ): Result<CheckStatusDto>

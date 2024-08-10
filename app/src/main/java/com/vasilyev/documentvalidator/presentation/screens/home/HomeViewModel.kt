@@ -39,4 +39,16 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun reduce(homeIntent: HomeIntent){
+        when(homeIntent) {
+            is HomeIntent.DocumentSelected -> {
+                _homeState.update {
+                    it.copy(
+                        selectedDocument = homeIntent.document
+                    )
+                }
+            }
+        }
+    }
 }

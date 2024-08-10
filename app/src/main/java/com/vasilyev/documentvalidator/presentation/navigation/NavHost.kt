@@ -33,8 +33,15 @@ fun NavHost(navController: NavHostController, innerPadding: PaddingValues){
             ResultScreen(navController = navController)
         }
 
-        composable(route = Screen.Checking.route){
-            CheckingScreen(navController = navController)
+        composable(route = Screen.Checking.route){backStackEntry ->
+            val uri = backStackEntry.arguments?.getString("uri")
+
+            uri?.let {
+                CheckingScreen(
+                    checkingFileUid = it,
+                    navController = navController
+                )
+            }
         }
     }
 }

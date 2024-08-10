@@ -74,8 +74,11 @@ fun CardResentCheck(
                 ResentCheckDescription(resentCheck)
             }
             OptionButton(
-                modifier = Modifier.align(Alignment.TopEnd)
-            ) { onOptionClicked(resentCheck) }
+                modifier = Modifier.align(Alignment.TopEnd),
+                onOptionClicked = {
+                    onOptionClicked(resentCheck)
+                }
+            )
         }
     }
 }
@@ -111,10 +114,10 @@ private fun ResentCheckDescription(resentCheck: CheckingResult) {
 @Composable
 private fun getDocumentName(documentType: Document): String{
     return when(documentType){
-        Document.ID_CARD -> stringResource(R.string.id_card)
-        Document.DRIVER_LICENSE -> stringResource(R.string.driver_license)
-        Document.BIRTH_DOCUMENT -> stringResource(R.string.birth_document)
-        Document.UNDEFINED -> stringResource(R.string.others)
+        Document.IdCard -> stringResource(R.string.id_card)
+        Document.DriverLicense -> stringResource(R.string.driver_license)
+        Document.BirthDocument -> stringResource(R.string.birth_document)
+        Document.Undefined -> stringResource(R.string.others)
     }
 }
 
@@ -148,7 +151,7 @@ fun ItemRecentResultPreview() {
     CardResentCheck(
         CheckingResult(
             0,
-            Document.BIRTH_DOCUMENT,
+            Document.BirthDocument,
             "",
             CheckStatus.SUCCESS,
             "Today"
