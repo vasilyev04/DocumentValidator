@@ -6,11 +6,14 @@ package com.vasilyev.documentvalidator.domain.models
 //    BIRTH_DOCUMENT,
 //    UNDEFINED,
 //}
-
 sealed class Document(val pageCount: Int){
+
     data object IdCard: Document(ID_CARD_PAGES)
+
     data object DriverLicense: Document(DRIVER_LICENSE_PAGES)
+
     data object BirthDocument: Document(BIRTH_DOCUMENT_PAGES)
+
     data object Undefined : Document(UNDEFINED_DOCUMENT_PAGES)
 
     companion object{

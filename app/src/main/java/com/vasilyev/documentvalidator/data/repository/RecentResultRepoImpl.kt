@@ -41,7 +41,7 @@ class RecentResultRepoImpl @Inject constructor(
         return checkingResultDbo.toCheckingResultModel()
     }
 
-    override fun addRecentResult(recent: CheckingResult): Int {
+    override suspend fun addRecentResult(recent: CheckingResult): Int {
         return checksDao.addCheckingResult(recent.toCheckingResultDbo()).toInt()
     }
 }

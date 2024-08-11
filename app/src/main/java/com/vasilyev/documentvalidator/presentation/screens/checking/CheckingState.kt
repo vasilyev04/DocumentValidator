@@ -4,7 +4,6 @@ import com.vasilyev.documentvalidator.domain.models.CheckingResult
 
 data class CheckingState(
     val isLoading: Boolean = false,
-    val checkingResult: CheckingResult? = null,
+    var checkingResultId: Int = CheckingResult.UNDEFINED_ID,
     val error: Throwable? = null
-) {
-}
+)

@@ -1,6 +1,5 @@
 package com.vasilyev.documentvalidator.domain.repository
 
-import com.vasilyev.documentvalidator.data.source.local.entity.CheckingResultDbo
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
 import kotlinx.coroutines.flow.Flow
 
@@ -9,5 +8,5 @@ interface RecentResultsRepository {
 
     suspend fun getRecentResult(id: Int): CheckingResult
 
-    fun addRecentResult(recent: CheckingResult): Int
+    suspend fun addRecentResult(recent: CheckingResult): Int
 }

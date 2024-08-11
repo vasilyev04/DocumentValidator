@@ -5,6 +5,7 @@ import com.vasilyev.documentvalidator.common.mappers.toCheckingResultModel
 import com.vasilyev.documentvalidator.common.utils.createMultiPartFile
 import com.vasilyev.documentvalidator.data.source.remote.models.CheckStatusDto
 import com.vasilyev.documentvalidator.data.source.remote.retrofit.ApiService
+import com.vasilyev.documentvalidator.domain.models.CheckStatus
 import com.vasilyev.documentvalidator.domain.models.CheckingResult
 import com.vasilyev.documentvalidator.domain.models.Document
 import com.vasilyev.documentvalidator.domain.repository.RecentResultsRepository
@@ -22,35 +23,30 @@ class ValidateDocumentsRepoImpl @Inject constructor(
         documentType: Document,
         uploadDate: String,
     ): Result<CheckingResult> {
-        val multiPart = createMultiPartFile(file, "file")
+//        val multiPart = createMultiPartFile(file, "file")
+//
+//        val result = apiService.checkIDCard(multiPart)
+//
+//        return if(result.isSuccess){
+//            val checkStatusDto = result.getOrNull()
+//                ?: return Result.failure(RuntimeException("response body is null"))
+//
+//            val id = saveResentCheck(checkStatusDto, documentType, uploadDate)
+//
+//            Result.success(recentResultRepo.getRecentResult(id))
+//        }else{
+//            Result.failure(result.exceptionOrNull()
+//                    ?: return Result.failure(RuntimeException("exception is null"))
+//            )
+//        }
 
-        val result = apiService.checkIDCard(multiPart)
-
-        return if(result.isSuccess){
-            val checkStatusDto = result.getOrNull()
-                ?: return Result.failure(RuntimeException("response body is null"))
-
-            val id = saveResentCheck(checkStatusDto, documentType, uploadDate)
-
-            Result.success(recentResultRepo.getRecentResult(id))
-        }else{
-            Result.failure(result.exceptionOrNull()
-                    ?: return Result.failure(RuntimeException("exception is null"))
-            )
-        }
-    }
-
-    private fun saveResentCheck(
-        checkStatusDto: CheckStatusDto,
-        documentType: Document,
-        uploadDate: String
-    ): Int {
-        val checkingResultDbo = checkStatusDto.toCheckingResultDbo(
+        val result = CheckingResult(
             documentType = documentType,
             documentPreview = "",
-            uploadDate = uploadDate
+            uploadDate = uploadDate,
+            checkStatus = CheckStatus.SUCCESS
         )
 
-        return recentResultRepo.addRecentResult(checkingResultDbo.toCheckingResultModel())
+        return Result.success(result)
     }
 }

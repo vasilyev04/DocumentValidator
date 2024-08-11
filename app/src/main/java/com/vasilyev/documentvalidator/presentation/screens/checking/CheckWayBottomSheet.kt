@@ -2,7 +2,6 @@ package com.vasilyev.documentvalidator.presentation.screens.checking
 
 
 import android.app.Activity
-import android.os.Bundle
 import com.vasilyev.documentvalidator.domain.models.Document
 import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -44,7 +43,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.navArgument
 import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions
 import com.google.mlkit.vision.documentscanner.GmsDocumentScanning
 import com.google.mlkit.vision.documentscanner.GmsDocumentScanningResult
@@ -54,13 +52,14 @@ import com.vasilyev.documentvalidator.presentation.theme.DefaultText
 import com.vasilyev.documentvalidator.presentation.theme.Primary
 import com.vasilyev.documentvalidator.presentation.theme.Typography
 import com.vasilyev.documentvalidator.presentation.theme.White
+import java.net.URLEncoder
 
 private const val FILE_PICKER_TYPE = "application/pdf"
 
 private fun launchScanner(
     context: Activity,
     pageLimit: Int,
-    scannerLauncher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>
+    scannerLauncher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>,
 ){
     val options = GmsDocumentScannerOptions.Builder()
         .setGalleryImportAllowed(true)
@@ -88,12 +87,14 @@ private fun launchScanner(
 fun CheckWayBottomSheet(
     navController: NavController,
     documentType: Document,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onCloseBottomSheet: () -> Unit
 ){
     ModalBottomSheet(
         navController = navController,
         documentType = documentType,
-        onDismiss = onDismiss
+        onDismiss = onDismiss,
+        onCloseBottomSheet = onCloseBottomSheet
     )
 }
 
@@ -102,8 +103,10 @@ fun CheckWayBottomSheet(
 private fun ModalBottomSheet(
     navController: NavController,
     documentType: Document,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onCloseBottomSheet: () -> Unit
 ){
+
     val scannerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
@@ -111,7 +114,18 @@ private fun ModalBottomSheet(
                     GmsDocumentScanningResult.fromActivityResultIntent(result.data)
 
                 scanningResult?.pdf?.uri?.let { uri ->
-                    navController.navigate(Screen.Checking.route.replace("{uri}", uri.toString()))
+                    val route = Screen.Checking.route.replace(
+                        oldValue = "{documentUri}",
+                        URLEncoder.encode(uri.toString(), "utf-8")
+                    ).replace(
+                        oldValue = "{documentType}",
+                        newValue = documentType.toString()
+                    )
+
+                    onCloseBottomSheet()
+                    navController.navigate(
+                        route
+                    )
                 }
             }
         }
@@ -121,10 +135,20 @@ private fun ModalBottomSheet(
     ){ uri ->
 
         uri?.let {
-//            startActivity(
-//                CheckingActivity.newIntent(
-//                    this@MainActivity, selectedDocument, uri.toString())
-//            )
+            Log.d("TESTETST", uri.toString())
+
+            val route = Screen.Checking.route.replace(
+                oldValue = "{documentUri}",
+                URLEncoder.encode(uri.toString(), "utf-8")
+            ).replace(
+                oldValue = "{documentType}",
+                newValue = documentType.toString()
+            )
+
+            onCloseBottomSheet()
+            navController.navigate(
+                route
+            )
         }
     }
 

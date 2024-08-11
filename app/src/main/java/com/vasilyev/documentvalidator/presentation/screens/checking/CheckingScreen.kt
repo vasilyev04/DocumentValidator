@@ -1,7 +1,7 @@
 package com.vasilyev.documentvalidator.presentation.screens.checking
 
-import android.util.Log
-import android.widget.Toast
+import android.app.Activity
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +17,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,15 +36,36 @@ import com.vasilyev.documentvalidator.R
 import com.vasilyev.documentvalidator.presentation.theme.Typography
 import com.vasilyev.documentvalidator.presentation.theme.DefaultText
 import com.airbnb.lottie.compose.LottieAnimation
-
+import com.vasilyev.documentvalidator.common.utils.uriToFile
+import com.vasilyev.documentvalidator.domain.models.CheckingResult
+import com.vasilyev.documentvalidator.domain.models.Document
+import com.vasilyev.documentvalidator.presentation.navigation.main.Screen
 
 @Composable
 fun CheckingScreen(
-    checkingFileUid: String,
+    documentUri: Uri,
+    documentType: Document,
     viewModel: CheckingViewModel = hiltViewModel(),
     navController: NavController
 ){
-    Toast.makeText(LocalContext.current, checkingFileUid, Toast.LENGTH_SHORT).show()
+
+    val context = LocalContext.current as Activity
+
+    LaunchedEffect(key1 = Unit) {
+       viewModel.reduce(CheckingIntent.ValidateDocument(
+           document = uriToFile(context, documentUri),
+           documentType = documentType
+        )
+       )
+    }
+
+    val state by viewModel.checkingState.collectAsState()
+    if(state.checkingResultId != CheckingResult.UNDEFINED_ID){
+        state.checkingResultId = CheckingResult.UNDEFINED_ID
+        navController.popBackStack()
+        navController.navigate(Screen.Result.route)
+    }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {

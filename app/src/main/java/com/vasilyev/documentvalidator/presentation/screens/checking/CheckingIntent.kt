@@ -7,6 +7,5 @@ interface CheckingIntent {
     data class ValidateDocument(
         val document: File,
         val documentType: Document,
-        val uploadDate: String
     ): CheckingIntent
 }

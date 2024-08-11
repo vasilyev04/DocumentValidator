@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Base64
 import android.util.Log
+import com.vasilyev.documentvalidator.domain.models.Document
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -37,9 +38,9 @@ fun base64ToBitmap(string: String): Bitmap{
 }
 
 
-fun uriToFile(context: Context, uri: Uri, documentName: String): File {
+fun uriToFile(context: Context, uri: Uri): File {
     val inputStream = context.contentResolver.openInputStream(uri)
-    val file = File(context.cacheDir, "$documentName.pdf")
+    val file = File(context.cacheDir, "${System.currentTimeMillis()}.pdf")
 
     inputStream?.use { input ->
         FileOutputStream(file).use { output ->

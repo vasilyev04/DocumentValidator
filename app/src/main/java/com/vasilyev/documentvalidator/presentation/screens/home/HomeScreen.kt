@@ -75,6 +75,9 @@ fun HomeScreen(
             documentType = state.selectedDocument,
             onDismiss =  {
                 coroutineScope.launch { shouldShowBottomSheet = false }
+            },
+            onCloseBottomSheet = {
+                shouldShowBottomSheet = false
             }
         )
     }
@@ -201,7 +204,9 @@ private fun RecentResults(list: List<CheckingResult>, navController: NavControll
                     CardResentCheck(
                         result,
                         onItemClick = {
-                            navController.navigate(Screen.Checking.route)
+                            navController.navigate(
+                                Screen.Result.route
+                            )
                         },
 
                         onOptionClicked = {
